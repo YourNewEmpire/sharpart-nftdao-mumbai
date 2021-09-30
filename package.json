@@ -4,6 +4,7 @@
   "description": "mumbai test contracts for sharpart nft dao testing",
   "main": "truffle-config.js",
   "dependencies": {
+    "@maticnetwork/pos-portal": "^1.5.2",
     "@openzeppelin/contracts": "^4.3.0",
     "@truffle/hdwallet-provider": "^1.4.0",
     "dotenv": "^10.0.0",
