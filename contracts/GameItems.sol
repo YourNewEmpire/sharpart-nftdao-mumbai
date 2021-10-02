@@ -13,7 +13,8 @@ contract GameItems is ERC1155, Ownable {
 
     // Me, the deployer
     address public chairperson;
-
+    // Proposals to vote on.
+    Proposal[] public proposals;
     // Check that the sender has any nft. I could do this for each/any token ID.
     modifier isNftOwner() {
         require(
@@ -23,7 +24,12 @@ contract GameItems is ERC1155, Ownable {
         _;
     }
 
-    Proposal[] public proposals;
+
+    // Typing for the Proposal object
+    struct Proposal {
+        bytes32 name; // short name (up to 32 bytes),
+        uint256 voteCount; // number of accumulated votes, should use counter util in future
+    }
 
     constructor() ERC1155("https://sharpart-frontend.vercel.app/nft-metadata/jsons/{id}.json") {
         _mint(msg.sender, COINS, 1, "");
@@ -31,11 +37,6 @@ contract GameItems is ERC1155, Ownable {
         chairperson = msg.sender;
     }
 
-    // Typing for the Proposal object
-    struct Proposal {
-        bytes32 name; // short name (up to 32 bytes),
-        uint256 voteCount; // number of accumulated votes, should use counter util in future
-    }
 
     //Only me, the sender can make proposals.
     function newProposal(bytes32 newName) public onlyOwner {
