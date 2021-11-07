@@ -1,9 +1,8 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.2;
+pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-
 
 contract GameItems is ERC1155, Ownable {
     // Assign number to act as token ID for Coins, art etc.
@@ -24,19 +23,21 @@ contract GameItems is ERC1155, Ownable {
         _;
     }
 
-
     // Typing for the Proposal object
     struct Proposal {
         bytes32 name; // short name (up to 32 bytes),
         uint256 voteCount; // number of accumulated votes, should use counter util in future
     }
 
-    constructor() ERC1155("https://sharpart-frontend.vercel.app/nft-metadata/jsons/{id}.json") {
+    constructor()
+        ERC1155(
+            "https://sharpart-frontend.vercel.app/nft-metadata/jsons/{id}.json"
+        )
+    {
         _mint(msg.sender, COINS, 1, "");
         _mint(msg.sender, ART, 1, "");
         chairperson = msg.sender;
     }
-
 
     //Only me, the sender can make proposals.
     function newProposal(bytes32 newName) public onlyOwner {

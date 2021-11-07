@@ -1,6 +1,15 @@
-### Test Dao mumbai erc155 sharpart
-### (Opensea V1)[https://testnets.opensea.io/collection/unidentified-contract-c2yxlceqxz]
-## TODOs
-* When moving to polygon mainnet, add Opensea's proxy contract.
-* Add more functionality, different proposals for different tokens. Levels of access per token step amount. 
-* Fix the music nft metadata in next version. Incorrect json field for media. 
+# Basic Sample Hardhat Project
+
+This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts.
+
+Try running some of the following tasks:
+
+```shell
+npx hardhat accounts
+npx hardhat compile
+npx hardhat clean
+npx hardhat test
+npx hardhat node
+node scripts/sample-script.js
+npx hardhat help
+```

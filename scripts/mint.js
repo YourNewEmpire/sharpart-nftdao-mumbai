@@ -1,68 +1,22 @@
-const HDWalletProvider = require('@truffle/hdwallet-provider');
-const web3 = require("web3");
-const fs = require('fs');
-const path = require("path");
-require('dotenv').config()
-
-//*vars
-const MNEMONIC = process.env.MNEMONIC
-const API_KEY = process.env.NODE_KEY
-
-
-//* Remember to write the nft address in manually after deploying the contract
-const NFT_CONTRACT_ADDRESS = ""
-const OWNER_ADDRESS = "";
-const MUMBAI = `https://rpc-mumbai.maticvigil.com/v1/${API_KEY}`
-const MATIC = `https://rpc-mainnet.maticvigil.com/v1/${API_KEY}`
+const hre = require("hardhat");
 const NUM_ITEMS = 5;
+const OWNER_ADDRESS = "0xdd079a5B0CDa6707960197a6B195a436E3CE7836";
+const NFT_ADDRESS = "0x09E3049a06c3BF520CEcA77dd49EE3d80C2De4B3";
 
-
-//*Parse the contract artifact for ABI reference.
-let rawdata = fs.readFileSync(path.resolve(__dirname, "../build/contracts/GameItem.json"));
-let contractAbi = JSON.parse(rawdata);
-const NFT_ABI = contractAbi.abi
-
+//todo - needs reworking for erc 1155
 async function main() {
 
-  try {
-    //*define web3, contract and wallet instances
-    const provider = new HDWalletProvider(
-      MNEMONIC,
-      MUMBAI
-    );
+      const GameItem = await hre.ethers.getContractFactory("GameItem");
+      const gameItem = await GameItem.attach(NFT_ADDRESS)
 
-    const web3Instance = new web3(provider);
-
-    const nftContract = new web3Instance.eth.Contract(
-      NFT_ABI,
-      NFT_CONTRACT_ADDRESS,
-    );
-
-
-      //* just mint 
-    await nftContract.methods
-      .mintItem(OWNER_ADDRESS, `your token json uri`)
-      .send({ from: OWNER_ADDRESS }).then(console.log('minted')).catch(error => console.log(error));
-
-
-    //* mint for a certain amount
-    /*
-    for (var i = 1; i < NUM_ITEMS; i++) {
-      await nftContract.methods
-        .mintItem(OWNER_ADDRESS, `https://ipfs.io/ipfs/QmZ13J2TyXTKjjyA46rYENRQYxEKjGtG6qyxUSXwhJZmZt/${i}.json`)
-        .send({ from: OWNER_ADDRESS }).then(console.log('minted')).catch(error => console.log(error));
-    }
-    */
-  }
-  
-  catch (e) {
-    console.log(e)
-  }
+      for (var i = 1; i <= NUM_ITEMS; i++) {
+            await gameItem.mintItem(OWNER_ADDRESS, `your_metadata_uri`);
+      }
 }
 
-//invoke
-main().then(() => process.exit(0))
-  .catch(error => {
-    console.error(error);
-    process.exit(1);
-  });
+main()
+      .then(() => process.exit(0))
+      .catch((error) => {
+            console.error(error);
+            process.exit(1);
+      });
