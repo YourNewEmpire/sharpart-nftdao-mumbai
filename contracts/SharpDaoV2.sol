@@ -39,15 +39,12 @@ contract SharpDaoV2 is ERC1155, Ownable {
     }
 
     // Pass in the array of owners and base URI
-    constructor(address[] memory _owners, string memory _baseURI)
-        ERC1155(_baseURI)
+    constructor(address[] memory _owners)
+        ERC1155("")
     {
         require(_owners.length > 0, "input of owners required");
         isOwner[msg.sender] = true;
         owners.push(msg.sender);
-        _mint(msg.sender, COINS, 1, "");
-        _mint(msg.sender, ART, 1, "");
-
         for (uint256 i = 0; i < _owners.length; i++) {
             address daoOwner = _owners[i];
 
@@ -76,5 +73,13 @@ contract SharpDaoV2 is ERC1155, Ownable {
         // In future, check that I or the NFT artist cannot vote.
         proposals[index].voteCount++;
         hasVoted[index][msg.sender] = true;
+    }
+
+    function setBaseURI(string memory newURI) public onlyOwners {
+        _setURI(newURI);
+    }
+    //Check the constant variables in the top of the contract for token IDs
+    function mintItem(uint tokenID, uint amount) public onlyOwners {
+        _mint(msg.sender, tokenID,  amount, "");
     }
 }
